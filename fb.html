@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #f5af19, #f12711);
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #444;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    .form-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .form-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+    }
+    .form-card h2 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+    input[type="text"], input[type="submit"] {
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+    input[type="text"] {
+      border: 2px solid #ddd;
+    }
+    input[type="text"]:focus {
+      border-color: #f12711;
+      outline: none;
+    }
+    input[type="submit"] {
+      border: none;
+      background-color: #f12711;
+      color: #fff;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #f5af19;
+    }
+
+    #d1{
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .product-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .product-card h3 {
+      margin: 0;
+      font-size: 1.5em;
+      color: #333;
+    }
+    .product-card p {
+      margin: 10px 0;
+      color: #555;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Product Management</h1>
+    <div class="form-section">
+      
+      <!-- Add Product -->
+      <div class="form-card">
+        <h2><span class="icon">➕</span>Add New Data</h2>
+        <form id="f1">
+          <label for="in4">Enter ID:</label>
+          <input type="text" id="in4" placeholder="Enter product ID" />
+          <label for="in1">Enter Name:</label>
+          <input type="text" id="in1" placeholder="Enter product name" />
+          <label for="in2">Enter Price:</label>
+          <input type="text" id="in2" placeholder="Enter product price" />
+          <label for="in3">Enter Stock:</label>
+          <input type="text" id="in3" placeholder="Enter stock quantity" />
+          <input type="submit" value="Add Product" />
+        </form>
+      </div>
+
+      <!-- Update Product -->
+      <div class="form-card">
+        <h2><span class="icon">🔄</span>Update Data</h2>
+        <form id="f2">
+          <label for="ii1">Enter ID:</label>
+          <input type="text" id="ii1" placeholder="Enter product ID" />
+          <label for="ii2">Enter Name:</label>
+          <input type="text" id="ii2" placeholder="Enter product name" />
+          <label for="ii3">Enter Price:</label>
+          <input type="text" id="ii3" placeholder="Enter product price" />
+          <label for="ii4">Enter Stock:</label>
+          <input type="text" id="ii4" placeholder="Enter stock quantity" />
+          <input type="submit" value="Update Product" />
+        </form>
+      </div>
+
+      <!-- Delete Product -->
+      <div class="form-card">
+        <h2><span class="icon">❌</span>Delete Data</h2>
+        <form id="f3">
+          <label for="iii1">Enter ID:</label>
+          <input type="text" id="iii1" placeholder="Enter product ID" />
+          <input type="submit" value="Delete Product" />
+        </form>
+      </div>
+    </div>
+
+    <div id="d1">
+
+    </div>
+
+  </div>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getDatabase, ref, get, set, update, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCUyMlfSrH3y5Us8haXQrlE28lwve0Kot4",
+      authDomain: "form-9d993.firebaseapp.com",
+      databaseURL: "https://form-9d993-default-rtdb.firebaseio.com",
+      projectId: "form-9d993",
+      storageBucket: "form-9d993.appspot.com",
+      messagingSenderId: "314325575661",
+      appId: "1:314325575661:web:78e32ed53ee72d227da9e4",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Add New Data
+    const f1 = document.getElementById("f1");
+    f1.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const in4 = document.getElementById("in4").value;
+      const in1 = document.getElementById("in1").value;
+      const in2 = document.getElementById("in2").value;
+      const in3 = document.getElementById("in3").value;
+
+      set(ref(database, "products/" + in4), {
+        name: in1,
+        price: in2,
+        stock: in3,
+      }).then(() => {
+        alert("Data saved successfully!");
+        window.location.reload();
+      }).catch((error) => {
+        console.error("Error saving data:", error);
+      });
+    });
+
+    // Update Data
+    const f2 = document.getElementById("f2");
+    f2.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const ii1 = document.getElementById("ii1").value;
+      const ii2 = document.getElementById("ii2").value;
+      const ii3 = document.getElementById("ii3").value;
+      const ii4 = document.getElementById("ii4").value;
+
+      update(ref(database, "products/" + ii1), {
+        name: ii2,
+        price: ii3,
+        stock: ii4,
+      }).then(() => {
+        alert("Data updated successfully!");
+        window.location.reload();
+      }).catch((error) => {
+        console.error("Error updating data:", error);
+      });
+    });
+
+    // Retrieve and Display Data
+    get(ref(database, "products")).then((snapshot) => {
+      if (snapshot.exists()) {
+        const d1 = document.getElementById("d1");
+        d1.innerHTML = '';
+        const products = snapshot.val();
+
+        for (const productId in products) {
+          if (products.hasOwnProperty(productId)) {
+            const product = products[productId];
+
+            // Create a card div
+            const card = document.createElement('div');
+            card.className = 'product-card';
+
+            // Add product details to the card
+            card.innerHTML = `
+              <h3>Product ID: ${productId}</h3>
+              <p><strong>Name:</strong> ${product.name || '-'}</p>
+              <p><strong>Price:</strong> ${product.price || '-'}</p>
+              <p><strong>Stock:</strong> ${product.stock || '-'}</p>
+            `;
+
+            // Append the card to the d1 div
+            d1.appendChild(card);
+          }
+        }
+      } else {
+        console.warn("No products found.");
+      }
+    }).catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+
+    // Delete Data
+    const f3 = document.getElementById("f3");
+    f3.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const iii1 = document.getElementById("iii1").value;
+
+      remove(ref(database, "products/" + iii1)).then(() => {
+        alert("Data deleted successfully!");
+        window.location.reload();
+      }).catch((error) => {
+        console.error("Error deleting data:", error);
+      });
+    });
+  </script>
+</body>
+</html>
